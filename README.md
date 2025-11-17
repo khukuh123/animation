@@ -14,10 +14,20 @@ An Android training project that walks through Jetpack Compose animation techniq
 
 ## Animation Types Covered
 - **HomeScreen** — Simple animation for sliding and breathing banner effects plus animated page indicators.
+<br><br>![Banner](./assets/banner.gif)
+
 - **ProductDetailScreen** — Visibility animation with `fadeIn`/`fadeOut` and `expandVertically`/`shrinkVertically`, wrapped in `animateContentSize`.
+<br><br>![Expandable](./assets/expandables.gif)
+
 - **Cart Badge** — Content animation for number transitions with slide, fade, and scale.
+<br><br>![Badge](./assets/badge.gif)
+
 - **CheckoutScreen** — Advance animation animating color, radius, scale, and rotation, plus a keyframe-based shake on failure.
+<br><br>![Success](./assets/update-transition-success.gif)
+<br><br>![Failed](./assets/update-transition-failed.gif)
+
 - **CheckoutSuccessScreen** — Canvas-drawn confetti driven by `rememberInfiniteTransition`.
+<br><br>![Confetti](./assets/confetti.gif) 
 
 ## Flow Overview
 ```
