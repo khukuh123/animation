@@ -1,5 +1,7 @@
 package com.sample.animation.ui.components
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -46,9 +48,16 @@ fun BannerSlider(
         }
     }
 
-    // TODO: 1.1 Simple animation for sliding and breathing banner effects.
-    val scale = remember { mutableStateOf(1f) }
-    val offset = remember { mutableStateOf(0f) }
+    val scale = animateFloatAsState(
+        targetValue = if (breathe) 1.04f else 1f,
+        animationSpec = tween(durationMillis = 800),
+        label = "BannerScale"
+    )
+    val offset = animateFloatAsState(
+        targetValue = if (breathe) 8f else -8f,
+        animationSpec = tween(durationMillis = 800),
+        label = "BannerOffset"
+    )
 
     Column(
         modifier = modifier,
@@ -86,8 +95,11 @@ fun BannerSlider(
         Spacer(modifier = Modifier.height(16.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             banners.forEachIndexed { index, _ ->
-                // TODO: 1.2 Simple animation for page indicators effects.
-                val indicatorScale = remember { mutableStateOf(1f) }
+                val indicatorScale = animateFloatAsState(
+                    targetValue = if (index == currentIndex) 1.2f else 0.8f,
+                    animationSpec = tween(250),
+                    label = "IndicatorScale"
+                )
                 val color = if (index == currentIndex) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
                 Spacer(
                     modifier = Modifier

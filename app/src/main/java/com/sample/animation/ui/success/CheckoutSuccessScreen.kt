@@ -1,5 +1,10 @@
 package com.sample.animation.ui.success
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,7 +20,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,15 +62,13 @@ fun CheckoutSuccessScreen(
         }
     }
 
-    /*
-    * TODO: 5.1 Adjust this code to achieve confetti-like animation with infinite transition
-    *  - First, declare the infinite transition with `rememberInfiniteTransition()`
-    *  - Then you need to declare `animationProgress` that act as percentage (float) of animation progress
-    *    with `animateFloat()` from transition
-    *  - Don't forget to use `infiniteRepeatable(animation = tween(durationMillis = 4000, easing = LinearEasing))`
-    *    for animation spec
-    * */
-    val animationProgress by remember { mutableStateOf(0f) }
+    val infiniteTransition = rememberInfiniteTransition(label = "ConfettiTransition")
+    val animationProgress by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(animation = tween(durationMillis = 4000, easing = LinearEasing)),
+        label = "Progress"
+    )
 
     Surface(modifier = modifier.fillMaxSize()) {
         Column(
@@ -85,16 +87,9 @@ fun CheckoutSuccessScreen(
             ) {
                 Canvas(modifier = Modifier.matchParentSize()) {
                     confetti.forEachIndexed { index, piece ->
-                        /*
-                        * TODO: 5.1 Fix this code to adjust the movement of each confetti unique with
-                        *  their own speed and index
-                        *  - Multiply index with piece.speed then add it with yOffset and
-                        *    multiply index with your random number
-                        *  - Don't forget to use modulo operator to keep value in size.height range
-                        * */
-                        val yOffset = size.height * animationProgress
+                        val yOffset = (size.height * animationProgress + piece.speed * index) % size.height
                         val x = piece.xPosition * size.width
-                        val rotation = animationProgress * 360f
+                        val rotation = (animationProgress * 360f + index * 15) % 360f
                         rotate(degrees = rotation, pivot = Offset(x, yOffset)) {
                             when (piece.shape) {
                                 ConfettiShape.Circle -> drawCircle(

@@ -1,5 +1,11 @@
 package com.sample.animation.ui.detail
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,13 +15,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -23,6 +25,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,8 +52,7 @@ fun ProductDetailScreen(
     onCheckout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // TODO: 2.1 Visibility animation with `fadeIn`/`fadeOut` and `expandVertically`/`shrinkVertically`, wrapped in `animateContentSize`.
-    var showMoreInfo by remember { mutableStateOf(true) }
+    var showMoreInfo by remember { mutableStateOf(false) }
 
     Surface(modifier = modifier.fillMaxSize()) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -96,20 +101,22 @@ fun ProductDetailScreen(
                     ) {
                         Text(text = if (showMoreInfo) "Hide More Info" else "More Info")
                     }
-
-                    /*
-                    * TODO: 2.2 Adjust this content to be expandable based on declared state
-                    *  Don't forget to put a modifier to automatically animate the height changes
-                     */
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
+                    AnimatedVisibility(
+                        visible = showMoreInfo,
+                        enter = fadeIn() + expandVertically(),
+                        exit = fadeOut() + shrinkVertically()
                     ) {
-                        Text(text = "Experience immersive sound with plush ear cushions and adaptive noise cancelling.", style = MaterialTheme.typography.bodyMedium)
-                        Text(text = "Warranty: 1 year", style = MaterialTheme.typography.bodySmall)
-                        Text(text = "Ships in 2-3 business days", style = MaterialTheme.typography.bodySmall)
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                                .animateContentSize(),
+                            verticalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            Text(text = "Experience immersive sound with plush ear cushions and adaptive noise cancelling.", style = MaterialTheme.typography.bodyMedium)
+                            Text(text = "Warranty: 1 year", style = MaterialTheme.typography.bodySmall)
+                            Text(text = "Ships in 2-3 business days", style = MaterialTheme.typography.bodySmall)
+                        }
                     }
                 }
             }

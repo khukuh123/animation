@@ -1,16 +1,25 @@
 package com.sample.animation.ui.components
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.with
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,16 +32,21 @@ fun CartBadge(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // TODO: 3.1 Content animation for number transitions with slide, fade, and scale.
     BadgedBox(
         badge = {
             if (count > 0) {
                 Badge(containerColor = MaterialTheme.colorScheme.secondary) {
-                    /*
-                    * TODO: 3.2 Wrap this content into content animation where targetState is count with slide, fade and scale
-                    * */
-                    Box(modifier = Modifier.size(16.dp), contentAlignment = Alignment.Center) {
-                        Text(text = "$count", style = MaterialTheme.typography.labelSmall)
+                    AnimatedContent(
+                        targetState = count,
+                        transitionSpec = {
+                            (slideInVertically { it } + fadeIn(animationSpec = tween(300)) + scaleIn()) with
+                                (slideOutVertically { -it } + fadeOut(animationSpec = tween(300)) + scaleOut())
+                        },
+                        label = "CartCount"
+                    ) { value ->
+                        Box(modifier = Modifier.size(16.dp), contentAlignment = Alignment.Center) {
+                            Text(text = "$value", style = MaterialTheme.typography.labelSmall)
+                        }
                     }
                 }
             }
@@ -47,59 +61,3 @@ fun CartBadge(
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Pssst.... Use (slideInVertically { it } + fadeIn(animationSpec = tween(300)) + scaleIn()) to enter,
-// and vice versa for transition (don't forget to combine them 'with together')
