@@ -152,7 +152,7 @@ fun CheckoutScreen(
                         scope.launch {
                             state = CheckoutState.Processing
                             delay(2500)
-                            state = if (Random.nextFloat() <= 0.6f) CheckoutState.Success else CheckoutState.Failed
+                            state = if (Random.nextFloat() <= 0.8f) CheckoutState.Success else CheckoutState.Failed
                             if (state == CheckoutState.Success) {
                                 delay(600)
                                 onSuccess()
